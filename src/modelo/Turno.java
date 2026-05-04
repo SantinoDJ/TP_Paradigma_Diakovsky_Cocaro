@@ -1,3 +1,5 @@
+package modelo;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -29,9 +31,16 @@ public class Turno {
 
     public void setHora(LocalTime hora) {this.hora = hora;}
 
+    public Paciente getPaciente() {return paciente;}
+
+    public void setPaciente(Paciente paciente) {this.paciente = paciente;}
+
+    public Odontologo getOdontologo() {return odontologo;}
+
+    public void setOdontologo(Odontologo odontologo) {this.odontologo = odontologo;}
 
     @Override
     public String toString() {
-        return "Turno #" + id + " | Fecha: " + fecha + " | Hora: " + hora + " | Paciente: " + paciente.getNombre() + " " + paciente.getApellido() + " | Odontólogo: " + odontologo.getNombre();
+        return "Modelo.Turno #" + id + " | Fecha: " + fecha + " | Hora: " + hora + " | Modelo.Paciente: " + paciente.getNombre() + " " + paciente.getApellido() + " | Odontólogo: " + odontologo.getNombre()  + " " + odontologo.getApellido();
     }
 }

@@ -1,4 +1,6 @@
-public class ObraSocial {
+package modelo;
+
+public class ObraSocial  {
     private String nombre;
     private String plan;
     private String numeroAfiliado;
@@ -12,7 +14,7 @@ public class ObraSocial {
 
     @Override
     public String toString() {
-        return "ObraSocial{" + "nombre='" + nombre + '\'' + ", plan='" + plan + '\'' + ", numeroAfiliado='" + numeroAfiliado + '\'' + '}';
+        return "Modelo.ObraSocial{" + "nombre='" + nombre + '\'' + ", plan='" + plan + '\'' + ", numeroAfiliado='" + numeroAfiliado + '\'' + '}';
     }
 
 }
