@@ -1,34 +1,33 @@
 package repositorio;
-
 import modelo.Paciente;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class PacienteRepositorio implements IRepositorio<Paciente> {
-    private List<Paciente> pacientes = new ArrayList<>();
+    // Usamos Long para la llave (el CUIL) y Paciente para el valor
+    private Map<Long, Paciente> pacientes = new HashMap<>();
 
     @Override
     public void guardar(Paciente p) {
-        pacientes.add(p);
+        pacientes.put(p.getCuil(), p); // El CUIL actúa como nuestro identificador único
     }
 
     @Override
-    public List<Paciente> buscarTodos() {
-        return pacientes;
+    public Paciente buscarPorId(Long id) {
+        return pacientes.get(id); // Buscamos directamente en el HashMap usando el CUIL
     }
 
     @Override
-    public Paciente buscarPorId(Integer id) {
-        for (Paciente p : pacientes) {
-            if (p.getId().equals(id)) {
-                return p;
-            }
-        }
-        return null;
+    public List<Paciente> listarTodos() {
+        return new ArrayList<>(pacientes.values());
     }
 
     @Override
-    public void eliminar(Integer id) {
-        pacientes.removeIf(p -> p.getId().equals(id));
+    public void eliminar(Long id) {
+        pacientes.remove(id);
+    }
+
+    @Override
+    public void actualizar(Paciente p) {
+        pacientes.put(p.getCuil(), p);
     }
 }

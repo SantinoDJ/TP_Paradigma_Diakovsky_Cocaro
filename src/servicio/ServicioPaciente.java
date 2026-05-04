@@ -5,30 +5,32 @@ import repositorio.IRepositorio;
 import java.util.List;
 
 public class ServicioPaciente {
-    // Esta es la conexión con el archivero (repositorio)
-    private IRepositorio<Paciente> pacienteRepo;
+    private IRepositorio<Paciente> repositorio;
 
-
-    public ServicioPaciente(IRepositorio<Paciente> repo) {
-        this.pacienteRepo = repo;
+    // Constructor que recibe el repositorio (Inyección de dependencias)
+    public ServicioPaciente(IRepositorio<Paciente> repositorio) {
+        this.repositorio = repositorio;
     }
 
-
     public void registrarPaciente(Paciente p) {
-
-        if (p.getNombre() != null && !p.getNombre().isEmpty() && p.getDni() != null) {
-            pacienteRepo.guardar(p);
-            System.out.println("✅ Paciente registrado: " + p.getNombre() + " " + p.getApellido());
+        // Validación: Expert y Controller
+        if (p.getNombre() != null && p.getCuil() != 0) {
+            repositorio.guardar(p);
+            System.out.println("✅ Paciente registrado con éxito: " + p.getNombre());
         } else {
-            System.out.println("❌ Error: No se puede registrar un paciente sin nombre o DNI.");
+            System.out.println("❌ Error: Datos incompletos.");
         }
     }
 
-    public List<Paciente> listarPacientes() {
-        return pacienteRepo.buscarTodos();
+    public List<Paciente> listarTodos() {
+        return repositorio.listarTodos();
     }
 
-    public Paciente buscarPorId(Integer id) {
-        return pacienteRepo.buscarPorId(id);
+    public Paciente buscarPorCuil(Long cuil) {
+        return repositorio.buscarPorId(cuil);
+    }
+
+    public void eliminarPaciente(Long cuil) {
+        repositorio.eliminar(cuil);
     }
 }

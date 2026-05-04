@@ -12,7 +12,6 @@ public class ServicioOdontologo {
     }
 
     public void registrarOdontologo(Odontologo o) {
-        // Validación: El odontólogo DEBE tener matrícula
         if (o.getMatricula() != null && !o.getMatricula().isEmpty()) {
             odontoRepo.guardar(o);
             System.out.println("✅ Odontólogo registrado: " + o.getNombre() + " (Matrícula: " + o.getMatricula() + ")");
@@ -22,10 +21,10 @@ public class ServicioOdontologo {
     }
 
     public List<Odontologo> listarOdontologos() {
-        return odontoRepo.buscarTodos();
+        return odontoRepo.listarTodos();
     }
 
-    public Odontologo buscarPorId(Integer id) {
+    public Odontologo buscarPorId(long id) {
         return odontoRepo.buscarPorId(id);
     }
 }

@@ -1,10 +1,10 @@
 package repositorio;
-
 import java.util.List;
 
 public interface IRepositorio<T> {
     void guardar(T t);
-    List<T> buscarTodos();
-    T buscarPorId(Integer id);
-    void eliminar(Integer id);
+    T buscarPorId(Long id);
+    List<T> listarTodos();
+    void eliminar(Long id);
+    void actualizar(T t);
 }

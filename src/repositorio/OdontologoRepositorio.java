@@ -1,34 +1,35 @@
 package repositorio;
 
 import modelo.Odontologo;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class OdontologoRepositorio implements IRepositorio<Odontologo> {
-    private List<Odontologo> odontologos = new ArrayList<>();
+    // Usamos Long para que coincida con IRepositorio
+    private Map<Long, Odontologo> odontologos = new HashMap<>();
 
     @Override
     public void guardar(Odontologo o) {
-        odontologos.add(o);
+        // Convertimos el id (Integer) a Long para guardarlo en el mapa
+        odontologos.put(Long.valueOf(o.getId()), o);
     }
 
     @Override
-    public List<Odontologo> buscarTodos() {
-        return odontologos;
+    public Odontologo buscarPorId(Long id) {
+        return odontologos.get(id);
     }
 
+    @Override
+    public List<Odontologo> listarTodos() {
+        return new ArrayList<>(odontologos.values());
+    }
 
     @Override
-    public Odontologo buscarPorId(Integer id) {
-        for (Odontologo o : odontologos) {
-            if (o.getId() != null && o.getId().equals(id)) {
-                return o;
-            }
-        }
-        return null;
+    public void eliminar(Long id) {
+        odontologos.remove(id);
     }
+
     @Override
-    public void eliminar(Integer id) {
-        odontologos.removeIf(o -> o.getId().equals(id));
+    public void actualizar(Odontologo o) {
+        odontologos.put(Long.valueOf(o.getId()), o);
     }
 }

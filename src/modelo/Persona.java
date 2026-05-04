@@ -1,18 +1,18 @@
 package modelo;
 
 public abstract class Persona {
-    protected Integer id;
+    protected long id;
     protected String nombre;
     protected String apellido;
 
-    public Persona(Integer id, String nombre, String apellido) {
+    public Persona(long id, String nombre, String apellido) {
         this.id = id;
         this.nombre = nombre;
         this.apellido = apellido;
     }
 
     // Getters y Setters comunes
-    public Integer getId() { return id; }
+    public long getId() { return id; }
 
     public void setId(Integer id) { this.id = id; }
 

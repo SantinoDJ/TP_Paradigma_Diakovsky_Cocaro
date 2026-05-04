@@ -3,7 +3,7 @@ package modelo;
 public class Odontologo extends Persona {
     private String matricula;
 
-    public Odontologo(Integer id, String nombre, String apellido, String matricula) {
+    public Odontologo(long id, String nombre, String apellido, String matricula) {
         super(id, nombre, apellido);
         this.matricula = matricula;
     }

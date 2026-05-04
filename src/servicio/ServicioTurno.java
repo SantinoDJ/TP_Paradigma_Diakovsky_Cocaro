@@ -19,7 +19,7 @@ public class ServicioTurno {
 
     public void agendarTurno(Turno t) {
 
-        Object p = servicioPaciente.buscarPorId(t.getPaciente().getId());
+        Object p = servicioPaciente.buscarPorCuil(t.getPaciente().getId());
 
         Object o = servicioOdonto.buscarPorId(t.getOdontologo().getId());
 
@@ -33,6 +33,6 @@ public class ServicioTurno {
     }
 
     public List<Turno> listarTodosLosTurnos() {
-        return turnoRepo.buscarTodos();
+        return turnoRepo.listarTodos();
     }
 }
