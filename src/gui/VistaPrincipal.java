@@ -13,7 +13,9 @@ public class VistaPrincipal extends JFrame {
     private ServicioOdontologo sOdonto;
     private ServicioTurno sTurno;
 
-    public VistaPrincipal(ServicioPaciente sPaciente, ServicioOdontologo sOdonto, ServicioTurno sTurno) {
+    public VistaPrincipal(ServicioPaciente sPaciente,
+                          ServicioOdontologo sOdonto,
+                          ServicioTurno sTurno) {
 
         this.sPaciente = sPaciente;
         this.sOdonto = sOdonto;
@@ -21,16 +23,14 @@ public class VistaPrincipal extends JFrame {
 
         setTitle("Sistema Odontológico");
         setSize(900, 600);
-
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
         setLocationRelativeTo(null);
-
         setLayout(new BorderLayout());
 
         JLabel titulo = new JLabel(
                 "Sistema de Gestión Odontológica",
-                SwingConstants.CENTER);
+                SwingConstants.CENTER
+        );
 
         add(titulo, BorderLayout.NORTH);
 
@@ -38,13 +38,20 @@ public class VistaPrincipal extends JFrame {
         panelBotones.setLayout(new GridLayout(3, 1, 10, 10));
 
         JButton btnPacientes = new JButton("Pacientes");
-
-        btnPacientes.addActionListener(e -> {
-            new VentanaPaciente(sPaciente);
-        });
-
         JButton btnOdontologos = new JButton("Odontólogos");
         JButton btnTurnos = new JButton("Turnos");
+
+        btnPacientes.addActionListener(e ->
+                new VentanaPaciente(sPaciente)
+        );
+
+        btnOdontologos.addActionListener(e ->
+                new VentanaOdontologo(sOdonto)
+        );
+
+        btnTurnos.addActionListener(e ->
+                new VentanaTurno(sTurno, sPaciente, sOdonto)
+        );
 
         panelBotones.add(btnPacientes);
         panelBotones.add(btnOdontologos);
