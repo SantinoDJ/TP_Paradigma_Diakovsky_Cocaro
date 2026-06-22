@@ -47,6 +47,16 @@ public class ServicioOdontologo {
                 .collect(Collectors.toList());
     }
 
+    public void eliminarOdontologo(long id) throws OdontologoNoEncontradoException {
+
+        Odontologo o = buscarPorId(id);
+
+        odontoRepo.eliminar(o.getId());
+
+    }
+
+
+
     public Odontologo buscarPorId(long id) throws OdontologoNoEncontradoException {
         Odontologo odontologo = odontoRepo.buscarPorId(id);
 

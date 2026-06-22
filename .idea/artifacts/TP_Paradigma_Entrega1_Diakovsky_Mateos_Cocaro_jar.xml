@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="TP_Paradigma_Entrega1_Diakovsky_Mateos_Cocaro:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/TP_Paradigma_Entrega1_Diakovsky_Mateos_Cocaro_jar</output-path>
+    <root id="archive" name="TP_Paradigma_Entrega1_Diakovsky_Mateos_Cocaro.jar">
+      <element id="module-output" name="TP_Paradigma_Entrega1_Diakovsky_Mateos_Cocaro" />
+    </root>
+  </artifact>
+</component>

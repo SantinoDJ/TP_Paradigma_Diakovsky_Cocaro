@@ -1,9 +1,13 @@
 package modelo;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-public class Turno {
+public class Turno implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     private Integer id;
     private LocalDate fecha;
     private LocalTime hora;
@@ -19,28 +23,66 @@ public class Turno {
         this.odontologo = odontologo;
     }
 
-    public Integer getId() {return id;}
 
-    public LocalDate getFecha() {return fecha;}
+    public Integer getId() {
+        return id;
+    }
 
-    public LocalTime getHora() {return hora;}
 
-    public void setId(Integer id) {this.id = id;}
+    public LocalDate getFecha() {
+        return fecha;
+    }
 
-    public void setFecha(LocalDate fecha) {this.fecha = fecha;}
 
-    public void setHora(LocalTime hora) {this.hora = hora;}
+    public LocalTime getHora() {
+        return hora;
+    }
 
-    public Paciente getPaciente() {return paciente;}
 
-    public void setPaciente(Paciente paciente) {this.paciente = paciente;}
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-    public Odontologo getOdontologo() {return odontologo;}
 
-    public void setOdontologo(Odontologo odontologo) {this.odontologo = odontologo;}
+    public void setFecha(LocalDate fecha) {
+        this.fecha = fecha;
+    }
+
+
+    public void setHora(LocalTime hora) {
+        this.hora = hora;
+    }
+
+
+    public Paciente getPaciente() {
+        return paciente;
+    }
+
+
+    public void setPaciente(Paciente paciente) {
+        this.paciente = paciente;
+    }
+
+
+    public Odontologo getOdontologo() {
+        return odontologo;
+    }
+
+
+    public void setOdontologo(Odontologo odontologo) {
+        this.odontologo = odontologo;
+    }
+
 
     @Override
     public String toString() {
-        return "Modelo.Turno #" + id + " | Fecha: " + fecha + " | Hora: " + hora + " | Modelo.Paciente: " + paciente.getNombre() + " " + paciente.getApellido() + " | Odontólogo: " + odontologo.getNombre()  + " " + odontologo.getApellido();
+
+        return "Turno #" + id +
+                " | Fecha: " + fecha +
+                " | Hora: " + hora +
+                " | Paciente: " + paciente.getNombre()
+                + " " + paciente.getApellido()
+                + " | Odontólogo: " + odontologo.getNombre()
+                + " " + odontologo.getApellido();
     }
 }
