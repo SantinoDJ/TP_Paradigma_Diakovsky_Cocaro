@@ -1,112 +1,156 @@
-package servicio; // Paquete de la capa de servicio.
+package servicio;
 
-import excepciones.DatoInvalidoException; // Excepción por datos inválidos.
-import excepciones.TurnoYaReservadoException; // Excepción si el turno ya está ocupado.
-import modelo.Turno; // Importa la clase Turno.
-import repositorio.IRepositorio; // Importa la interfaz del repositorio.
+import excepciones.DatoInvalidoException;
+import excepciones.TurnoYaReservadoException;
+import modelo.Turno;
+import repositorio.IRepositorio;
 
-import java.time.LocalDate; // Permite usar fechas.
-import java.util.List; // Permite usar listas.
-import java.util.stream.Collectors; // Convierte un Stream en una lista.
+import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 
+
+// Clase que maneja la lógica de los turnos
 public class ServicioTurno {
 
-    private IRepositorio<Turno> turnoRepo;
-    // Repositorio de turnos.
 
-    private ServicioPaciente servicioPaciente;
-    // Servicio de pacientes.
+    private IRepositorio<Turno> turnoRepo; // Repositorio donde se guardan los turnos
 
-    private ServicioOdontologo servicioOdonto;
-    // Servicio de odontólogos.
+    private ServicioPaciente servicioPaciente; // Servicio para validar pacientes
 
+    private ServicioOdontologo servicioOdonto; // Servicio para validar odontólogos
+
+
+
+    // Constructor que recibe repositorio y servicios necesarios
     public ServicioTurno(IRepositorio<Turno> repo,
                          ServicioPaciente sPaciente,
                          ServicioOdontologo sOdonto) {
-        // Constructor.
 
-        this.turnoRepo = repo;
-        // Inicializa el repositorio.
 
-        this.servicioPaciente = sPaciente;
-        // Inicializa el servicio de pacientes.
+        this.turnoRepo = repo; // Guarda el repositorio de turnos
 
-        this.servicioOdonto = sOdonto;
-        // Inicializa el servicio de odontólogos.
+        this.servicioPaciente = sPaciente; // Guarda servicio de pacientes
+
+        this.servicioOdonto = sOdonto; // Guarda servicio de odontólogos
     }
 
-    public void agendarTurno(Turno t) throws Exception {
-        // Agenda un turno.
 
-        if (t == null) {
-            // Verifica que el turno no sea nulo.
+
+    // Crea y guarda un nuevo turno
+    public void agendarTurno(Turno t) throws Exception {
+
+
+        if (t == null) { // Verifica que el turno no sea vacío
+
             throw new DatoInvalidoException("El turno no puede ser nulo.");
+
         }
 
+
+        // Verifica que el paciente exista
         servicioPaciente.buscarPorCuil(t.getPaciente().getCuil());
-        // Verifica que exista el paciente.
 
+
+        // Verifica que el odontólogo exista
         servicioOdonto.buscarPorId(t.getOdontologo().getId());
-        // Verifica que exista el odontólogo.
 
+
+
+        // Busca si ya existe un turno en ese horario
         boolean ocupado = turnoRepo.listarTodos()
-                .stream() // Recorre la lista de turnos
-                .anyMatch(turno -> // Lambda: revisa cada turno y devuelve true o false.
-                        turno.getFecha().equals(t.getFecha()) // Compara la fecha.
-                                && turno.getHora().equals(t.getHora())  // Compara la hora.
-                                && turno.getOdontologo().getId() == t.getOdontologo().getId() // Compara si es el mismo odontólogo.
-                );
-        // Verifica si ya existe un turno en ese horario.
 
-        if (ocupado) {
-            // Si está ocupado, lanza una excepción.
+                .stream() // Convierte la lista de turnos en un stream para poder filtrarla
+
+                .anyMatch(turno -> // Devuelve true si encuentra coincidencia
+
+                        turno.getFecha().equals(t.getFecha()) // Compara si la fecha del turno existente es igual a la nueva fecha
+
+                                && turno.getHora().equals(t.getHora())  // Compara si la hora del turno existente es igual a la nueva hora
+
+                                && turno.getOdontologo().getId() == t.getOdontologo().getId()  // Compara si el odontólogo es el mismo usando su ID
+
+
+                ); // Busca si existe un turno con la misma fecha, hora y odontólogo. Si encuentra uno devuelve true
+
+
+
+        if (ocupado) { // Si el horario ya está ocupado lanza error
+
             throw new TurnoYaReservadoException(
                     "El odontólogo ya tiene un turno asignado en ese horario."
             );
+
         }
 
-        turnoRepo.guardar(t);
-        // Guarda el turno.
+
+
+        turnoRepo.guardar(t); // Guarda el turno en el repositorio
+
 
         System.out.println("✅ Turno agendado con éxito.");
-        // Muestra un mensaje.
+
     }
 
+
+
+
+    // Devuelve todos los turnos registrados
     public List<Turno> listarTodosLosTurnos() {
-        // Devuelve todos los turnos.
+
         return turnoRepo.listarTodos();
+
     }
 
+
+
+
+    // Busca turnos por una fecha específica
     public List<Turno> buscarTurnosPorFecha(LocalDate fecha) {
-        // Busca turnos por fecha.
+
 
         return turnoRepo.listarTodos()
-                .stream() // Recorre la lista.
-                .filter(t -> t.getFecha().equals(fecha))
-                // Filtra por fecha.
-                .collect(Collectors.toList()); // Devuelve una lista.
+
+                .stream() // Convierte lista en stream
+
+                .filter(t -> t.getFecha().equals(fecha)) // Filtra por fecha
+
+                .collect(Collectors.toList()); // Convierte nuevamente a lista
 
     }
 
+
+
+
+    // Busca turnos de un paciente usando su CUIL
     public List<Turno> buscarTurnosPorPaciente(Long cuilPaciente) {
-        // Busca turnos de un paciente.
+
 
         return turnoRepo.listarTodos()
-                .stream() // Recorre la lista.
-                .filter(t -> t.getPaciente().getCuil() == cuilPaciente)
-                // Filtra por CUIL.
-                .collect(Collectors.toList());  // Devuelve una lista.
+
+                .stream() // Permite recorrer y filtrar la lista
+
+                .filter(t -> t.getPaciente().getCuil() == cuilPaciente) // Filtra por CUIL
+
+                .collect(Collectors.toList()); // Devuelve una lista con resultados
 
     }
 
+
+
+
+    // Busca turnos de un odontólogo usando su ID
     public List<Turno> buscarTurnosPorOdontologo(Long idOdontologo) {
-        // Busca turnos de un odontólogo.
+
 
         return turnoRepo.listarTodos()
-                .stream() // Recorre la lista.
-                .filter(t -> t.getOdontologo().getId() == idOdontologo)
-                // Filtra por ID.
-                .collect(Collectors.toList()); // Devuelve una lista.
+
+                .stream() // Convierte la lista para procesarla
+
+                .filter(t -> t.getOdontologo().getId() == idOdontologo) // Filtra por ID
+
+                .collect(Collectors.toList()); // Convierte resultado a lista
 
     }
+
 }

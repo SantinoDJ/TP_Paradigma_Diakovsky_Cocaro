@@ -1,89 +1,108 @@
 package gui;
 
-// Importa las clases del modelo que se van a mostrar
 import modelo.Paciente;
 import modelo.Odontologo;
 import modelo.Turno;
 
-// Importa los servicios que manejan la información
 import servicio.ServicioPaciente;
 import servicio.ServicioOdontologo;
 import servicio.ServicioTurno;
 
-
-// Librerías para crear la interfaz gráfica
 import javax.swing.*;
-
-// Permite manejar el modelo de datos de la tabla
 import javax.swing.table.DefaultTableModel;
 
 import java.awt.*;
 import java.util.List;
 
 
-// JFrame permite crear una ventana
 public class VentanaBuscar extends JFrame {
+    // extends JFrame significa que esta clase hereda de una ventana de Java Swing
 
 
-    // Servicios que permiten acceder a pacientes, odontólogos y turnos
+    // Servicios que permiten acceder a la lógica del sistema
     private ServicioPaciente sPaciente;
     private ServicioOdontologo sOdonto;
     private ServicioTurno sTurno;
 
 
-    // JTable representa la tabla donde se muestran los resultados
+
+    // JTable es una tabla visual para mostrar información
     private JTable tabla;
 
-    // Controla las filas y columnas de la tabla
+
+    // Modelo que controla los datos que aparecen en la tabla
     private DefaultTableModel modeloTabla;
+
 
 
     // Caja de texto donde el usuario escribe la búsqueda
     private JTextField txtBuscar;
 
 
-    // Botones para elegir qué buscar
+
+    // Botones de búsqueda
     private JButton btnBuscarPaciente;
     private JButton btnBuscarOdontologo;
     private JButton btnBuscarTurno;
 
 
 
-    // Constructor: se ejecuta cuando se crea la ventana
-    public VentanaBuscar(ServicioPaciente sPaciente, ServicioOdontologo sOdonto, ServicioTurno sTurno) {
 
 
-        // Guarda los servicios recibidos para usarlos en la ventana
+    // Constructor de la ventana
+    public VentanaBuscar(ServicioPaciente sPaciente,
+                         ServicioOdontologo sOdonto,
+                         ServicioTurno sTurno) {
+
+
+        // Guarda los servicios recibidos
         this.sPaciente = sPaciente;
         this.sOdonto = sOdonto;
         this.sTurno = sTurno;
 
 
-        // Configuración de la ventana
-        setTitle("Buscar"); // Nombre que aparece arriba
-        setSize(900,400); // Tamaño de la ventana
-        setLocationRelativeTo(null); // Centra la ventana
-        setLayout(new BorderLayout()); // Organiza los componentes
+
+        // Título de la ventana
+        setTitle("Buscar");
+
+
+        // Tamaño de la ventana
+        setSize(900,400);
+
+
+        // Centra la ventana en la pantalla
+        setLocationRelativeTo(null);
+
+
+        // BorderLayout organiza los componentes por zonas
+        setLayout(new BorderLayout());
 
 
 
-        // Panel donde se agregan botones y buscador
+
+
+        // Panel donde se colocan botones y caja de búsqueda
         JPanel panel = new JPanel();
 
 
-        // Campo donde se ingresa el texto a buscar
+
+        // Campo de texto donde se ingresa lo que se quiere buscar
         txtBuscar = new JTextField(15);
 
 
 
-        // Creación de los botones
+
+        // Creación de botones
         btnBuscarPaciente = new JButton("Paciente");
+
         btnBuscarOdontologo = new JButton("Odontólogo");
+
         btnBuscarTurno = new JButton("Turno");
 
 
 
-        // Agrega los componentes al panel
+
+        // Agrega componentes al panel
         panel.add(txtBuscar);
         panel.add(btnBuscarPaciente);
         panel.add(btnBuscarOdontologo);
@@ -91,29 +110,40 @@ public class VentanaBuscar extends JFrame {
 
 
 
-        // Crea un modelo vacío para manejar la tabla
+
+        // Crea el modelo vacío de la tabla
         modeloTabla = new DefaultTableModel();
 
 
-        // Crea una tabla usando el modelo anterior
+
+        // Crea la tabla usando ese modelo
         tabla = new JTable(modeloTabla);
+
 
 
 
         // Agrega el panel arriba de la ventana
         add(panel, BorderLayout.NORTH);
 
-        // Agrega la tabla en el centro con barra de desplazamiento
+
+        // JScrollPane permite hacer scroll en la tabla
         add(new JScrollPane(tabla), BorderLayout.CENTER);
 
 
 
-        // Lambda: cuando se toca el botón ejecuta el método correspondiente
+
+
+        // Cuando se hace click en el botón llama al método buscarPaciente
         btnBuscarPaciente.addActionListener(e -> buscarPaciente());
 
+
+        // Cuando se hace click llama al método buscarOdontologo
         btnBuscarOdontologo.addActionListener(e -> buscarOdontologo());
 
+
+        // Cuando se hace click llama al método buscarTurno
         btnBuscarTurno.addActionListener(e -> buscarTurno());
+
 
 
 
@@ -126,12 +156,13 @@ public class VentanaBuscar extends JFrame {
 
 
 
-    // Método que busca pacientes
+    // Busca pacientes según el texto ingresado
     private void buscarPaciente(){
 
 
-        // Borra las filas anteriores de la tabla
+        // Limpia las filas anteriores de la tabla
         modeloTabla.setRowCount(0);
+
 
 
         // Define las columnas que tendrá la tabla
@@ -143,19 +174,28 @@ public class VentanaBuscar extends JFrame {
                 });
 
 
-        // Obtiene el texto escrito por el usuario
+
+
+        // Obtiene lo escrito por el usuario
         String texto = txtBuscar.getText();
 
 
 
-        // Recorre la lista de pacientes
+
+        // Recorre todos los pacientes
         for(Paciente p : sPaciente.listarTodos()){
 
 
-            // Comprueba si el texto coincide con CUIL o nombre
+
+            // Verifica si coincide con la búsqueda
             if(texto.isEmpty()
+
+                    // Busca por CUIL
                     || String.valueOf(p.getCuil()).contains(texto)
+
+                    // Busca por nombre ignorando mayúsculas/minúsculas
                     || p.getNombre().toLowerCase().contains(texto.toLowerCase())){
+
 
 
                 // Agrega el paciente encontrado a la tabla
@@ -177,15 +217,17 @@ public class VentanaBuscar extends JFrame {
 
 
 
-    // Método que busca odontólogos
+
+    // Busca odontólogos
     private void buscarOdontologo(){
 
 
-        // Limpia resultados anteriores
+        // Limpia la tabla
         modeloTabla.setRowCount(0);
 
 
-        // Define las columnas de la tabla
+
+        // Define columnas
         modeloTabla.setColumnIdentifiers(
                 new Object[]{
                         "ID",
@@ -196,8 +238,9 @@ public class VentanaBuscar extends JFrame {
 
 
 
-        // Guarda el texto buscado
+
         String texto = txtBuscar.getText();
+
 
 
 
@@ -205,14 +248,20 @@ public class VentanaBuscar extends JFrame {
         for(Odontologo o : sOdonto.listarOdontologos()){
 
 
-            // Busca coincidencias por nombre o matrícula
+
             if(texto.isEmpty()
+
+                    // Busca por nombre
                     || o.getNombre().toLowerCase().contains(texto.toLowerCase())
+
+                    // Busca por matrícula
                     || o.getMatricula().contains(texto)){
 
 
-                // Agrega el odontólogo encontrado
+
+                // Agrega odontólogo encontrado
                 modeloTabla.addRow(new Object[]{
+
 
                         o.getId(),
                         o.getNombre(),
@@ -231,8 +280,11 @@ public class VentanaBuscar extends JFrame {
 
 
 
-    // Método que busca turnos
+
+
+    // Busca turnos
     private void buscarTurno(){
+
 
 
         // Limpia la tabla
@@ -240,7 +292,7 @@ public class VentanaBuscar extends JFrame {
 
 
 
-        // Define las columnas que muestra la tabla
+        // Define columnas de turnos
         modeloTabla.setColumnIdentifiers(
                 new Object[]{
                         "ID",
@@ -252,20 +304,28 @@ public class VentanaBuscar extends JFrame {
 
 
 
-        // Obtiene el texto buscado
+
         String texto = txtBuscar.getText();
 
 
 
-        // Recorre todos los turnos registrados
+
+        // Recorre todos los turnos
         for(Turno t : sTurno.listarTodosLosTurnos()){
 
 
-            // Busca por ID, fecha o nombre del paciente
+
             if(texto.isEmpty()
+
+                    // Busca por ID del turno
                     || String.valueOf(t.getId()).contains(texto)
+
+                    // Busca por fecha
                     || t.getFecha().toString().contains(texto)
+
+                    // Busca por nombre del paciente
                     || t.getPaciente().getNombre().toLowerCase().contains(texto.toLowerCase())){
+
 
 
                 // Agrega el turno encontrado a la tabla
@@ -273,13 +333,17 @@ public class VentanaBuscar extends JFrame {
 
 
                         t.getId(),
+
                         t.getFecha(),
+
                         t.getHora(),
+
 
                         // Muestra nombre completo del paciente
                         t.getPaciente().getNombre()
                                 + " "
                                 + t.getPaciente().getApellido(),
+
 
 
                         // Muestra nombre completo del odontólogo

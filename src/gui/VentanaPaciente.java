@@ -1,34 +1,25 @@
 package gui;
 
-// Importa la clase Paciente del modelo
 import modelo.Paciente;
-
-// Importa el servicio que maneja los pacientes
 import servicio.ServicioPaciente;
 
-
-// Librerías para interfaz gráfica
 import javax.swing.*;
-
-// Maneja los datos de la tabla
 import javax.swing.table.DefaultTableModel;
-
 import java.awt.*;
-
-// Permite trabajar con fechas
 import java.time.LocalDate;
 
 
-// JFrame permite crear una ventana
 public class VentanaPaciente extends JFrame {
+    // extends JFrame: esta clase hereda de una ventana de Java Swing
 
 
-    // Servicio encargado de registrar, modificar, eliminar y buscar pacientes
+
+    // Servicio que maneja la lógica de pacientes
     private ServicioPaciente sPaciente;
 
 
 
-    // Campos donde el usuario ingresa los datos del paciente
+    // Campos de texto donde el usuario ingresa datos
     private JTextField txtNombre;
     private JTextField txtApellido;
     private JTextField txtCuil;
@@ -38,8 +29,10 @@ public class VentanaPaciente extends JFrame {
     // Tabla donde se muestran los pacientes
     private JTable tabla;
 
-    // Controla los datos que aparecen en la tabla
+
+    // Modelo que controla los datos de la tabla
     private DefaultTableModel modeloTabla;
+
 
 
 
@@ -52,45 +45,75 @@ public class VentanaPaciente extends JFrame {
 
 
 
-        // Configuración de la ventana
-        setTitle("Gestión de Pacientes"); // Título
-        setSize(700, 500); // Tamaño
-        setLocationRelativeTo(null); // Centra la ventana
-        setLayout(new BorderLayout()); // Distribuye componentes
+        // Título de la ventana
+        setTitle("Gestión de Pacientes");
 
 
 
-        // Panel que contiene los campos y botones
+        // Tamaño de la ventana
+        setSize(700, 500);
+
+
+
+        // Centra la ventana
+        setLocationRelativeTo(null);
+
+
+
+        // Organiza los componentes
+        setLayout(new BorderLayout());
+
+
+
+
+
+        // Panel del formulario
+        // GridLayout organiza los elementos en filas y columnas
         JPanel formulario = new JPanel(new GridLayout(5, 2, 10, 10));
 
 
 
-        // Campo para nombre
+
+        // Campo nombre
         formulario.add(new JLabel("Nombre:"));
+
         txtNombre = new JTextField();
+
         formulario.add(txtNombre);
 
 
 
-        // Campo para apellido
+
+        // Campo apellido
         formulario.add(new JLabel("Apellido:"));
+
         txtApellido = new JTextField();
+
         formulario.add(txtApellido);
 
 
 
-        // Campo para CUIL
+
+        // Campo CUIL
         formulario.add(new JLabel("CUIL:"));
+
         txtCuil = new JTextField();
+
         formulario.add(txtCuil);
 
 
 
-        // Creación de botones de acciones
+
+
+        // Botones de acciones
         JButton btnAgregar = new JButton("Agregar Paciente");
+
         JButton btnModificar = new JButton("Modificar Paciente");
+
         JButton btnEliminar = new JButton("Eliminar Paciente");
+
         JButton btnLimpiar = new JButton("Limpiar");
+
 
 
 
@@ -102,17 +125,24 @@ public class VentanaPaciente extends JFrame {
 
 
 
-        // Coloca el formulario arriba de la ventana
+
+        // Coloca el formulario arriba
         add(formulario, BorderLayout.NORTH);
 
 
 
 
-        // Define las columnas que tendrá la tabla
-        String[] columnas = {"Nombre", "Apellido", "CUIL"};
+
+        // Columnas que tendrá la tabla
+        String[] columnas = {
+                "Nombre",
+                "Apellido",
+                "CUIL"
+        };
 
 
-        // Crea el modelo de la tabla con esas columnas
+
+        // Crea el modelo de la tabla
         modeloTabla = new DefaultTableModel(columnas, 0);
 
 
@@ -121,23 +151,26 @@ public class VentanaPaciente extends JFrame {
         tabla = new JTable(modeloTabla);
 
 
-        // Agrega barra de desplazamiento a la tabla
+
+        // JScrollPane permite desplazarse por la tabla
         JScrollPane scroll = new JScrollPane(tabla);
 
 
 
-        // Coloca la tabla en el centro
+        // Agrega la tabla al centro
         add(scroll, BorderLayout.CENTER);
 
 
 
 
-        // Carga los pacientes existentes en la tabla
+        // Carga los pacientes existentes
         cargarTabla();
 
 
 
-        // Cada botón ejecuta un método diferente
+
+
+        // Cuando se hace click llama al método correspondiente
         btnAgregar.addActionListener(e -> agregarPaciente());
 
         btnModificar.addActionListener(e -> modificarPaciente());
@@ -148,63 +181,78 @@ public class VentanaPaciente extends JFrame {
 
 
 
-        // Evento al seleccionar una fila de la tabla
+
+
+        // Detecta cuando se selecciona una fila de la tabla
         tabla.addMouseListener(new java.awt.event.MouseAdapter() {
 
 
             public void mouseClicked(java.awt.event.MouseEvent e) {
 
 
-                // Guarda la fila seleccionada
+                // Obtiene la fila seleccionada
                 int fila = tabla.getSelectedRow();
 
 
 
-                // Pasa los datos de la fila a los campos
-                txtNombre.setText(tabla.getValueAt(fila, 0).toString());
+                // Carga los datos seleccionados en los campos
+                txtNombre.setText(
+                        tabla.getValueAt(fila, 0).toString()
+                );
 
-                txtApellido.setText(tabla.getValueAt(fila, 1).toString());
 
-                txtCuil.setText(tabla.getValueAt(fila, 2).toString());
+                txtApellido.setText(
+                        tabla.getValueAt(fila, 1).toString()
+                );
+
+
+                txtCuil.setText(
+                        tabla.getValueAt(fila, 2).toString()
+                );
 
             }
+
         });
+
 
 
 
         // Hace visible la ventana
         setVisible(true);
+
     }
 
 
 
 
 
-    // Método para agregar un paciente
+
+    // Método para agregar pacientes
     private void agregarPaciente() {
 
 
         try {
 
 
-            // Verifica que los campos estén completos
+            // Valida que los campos tengan datos
             validarCampos();
 
 
 
-            // Obtiene los datos escritos
+            // Obtiene los datos ingresados
             String nombre = txtNombre.getText().trim();
 
             String apellido = txtApellido.getText().trim();
 
 
-            // Convierte el CUIL de texto a número
+            // Convierte el texto del CUIL a número
             long cuil = Long.parseLong(txtCuil.getText().trim());
 
 
 
-            // Crea un nuevo objeto paciente
+            // Crea un nuevo objeto Paciente
             Paciente nuevo = new Paciente(
+
                     0,
                     nombre,
                     apellido,
@@ -214,17 +262,19 @@ public class VentanaPaciente extends JFrame {
                     "",
                     LocalDate.now(),
                     null
+
             );
 
 
 
-            // Envía el paciente al servicio para registrarlo
+            // Envía el paciente al servicio para guardarlo
             sPaciente.registrarPaciente(nuevo);
 
 
 
-            // Actualiza tabla
+            // Actualiza la tabla
             cargarTabla();
+
 
 
             // Limpia los campos
@@ -232,17 +282,22 @@ public class VentanaPaciente extends JFrame {
 
 
 
-            // Mensaje de confirmación
-            JOptionPane.showMessageDialog(this, "Paciente agregado correctamente");
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Paciente agregado correctamente"
+            );
 
 
 
         } catch (Exception ex) {
 
-
-            // Muestra errores
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-
+            // Captura errores y muestra mensaje
+            JOptionPane.showMessageDialog(
+                    this,
+                    ex.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE
+            );
         }
 
     }
@@ -251,50 +306,63 @@ public class VentanaPaciente extends JFrame {
 
 
 
-    // Método para modificar un paciente existente
-    private void modificarPaciente() {
 
+
+
+    // Modifica un paciente existente
+    private void modificarPaciente() {
 
         try {
 
 
-            // Valida los campos
             validarCampos();
 
 
 
-            // Obtiene el CUIL del paciente
-            long cuil = Long.parseLong(txtCuil.getText().trim());
+            long cuil =
+                    Long.parseLong(txtCuil.getText().trim());
 
 
 
             // Busca el paciente por CUIL
-            Paciente paciente = sPaciente.buscarPorCuil(cuil);
+            Paciente paciente =
+                    sPaciente.buscarPorCuil(cuil);
 
 
 
-            // Modifica sus datos
-            paciente.setNombre(txtNombre.getText().trim());
+            // Cambia sus datos
+            paciente.setNombre(
+                    txtNombre.getText().trim()
+            );
 
-            paciente.setApellido(txtApellido.getText().trim());
+
+            paciente.setApellido(
+                    txtApellido.getText().trim()
+            );
 
 
 
-            // Actualiza tabla y limpia campos
             cargarTabla();
 
             limpiarCampos();
 
 
 
-            JOptionPane.showMessageDialog(this, "Paciente modificado correctamente");
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Paciente modificado correctamente"
+            );
 
 
 
-        } catch (Exception ex) {
+        } catch(Exception ex){
 
-
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(
+                    this,
+                    ex.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE
+            );
 
         }
 
@@ -304,67 +372,80 @@ public class VentanaPaciente extends JFrame {
 
 
 
-    // Método para eliminar un paciente
-    private void eliminarPaciente() {
 
+
+
+    // Elimina un paciente
+    private void eliminarPaciente() {
 
         try {
 
 
-            // Verifica que haya un CUIL ingresado
-            if (txtCuil.getText().trim().isEmpty()) {
+            // Verifica que haya un CUIL escrito
+            if(txtCuil.getText().trim().isEmpty()){
 
 
-                JOptionPane.showMessageDialog(this, "Seleccione o ingrese un CUIL", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Seleccione o ingrese un CUIL",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE
+                );
+
 
                 return;
-
             }
 
 
 
-            // Convierte CUIL a número
-            long cuil = Long.parseLong(txtCuil.getText().trim());
+            long cuil =
+                    Long.parseLong(txtCuil.getText().trim());
 
 
 
             // Pregunta confirmación antes de eliminar
-            int opcion = JOptionPane.showConfirmDialog(
-                    this,
-                    "¿Seguro que querés eliminar este paciente?",
-                    "Confirmar eliminación",
-                    JOptionPane.YES_NO_OPTION
-            );
+            int opcion =
+                    JOptionPane.showConfirmDialog(
+                            this,
+                            "¿Seguro que querés eliminar este paciente?",
+                            "Confirmar eliminación",
+                            JOptionPane.YES_NO_OPTION
+                    );
 
 
 
-            // Si acepta elimina el paciente
-            if (opcion == JOptionPane.YES_OPTION) {
+            // Si acepta elimina
+            if(opcion == JOptionPane.YES_OPTION){
 
 
                 sPaciente.eliminarPaciente(cuil);
 
 
 
-                // Actualiza tabla
                 cargarTabla();
 
 
-                // Limpia campos
                 limpiarCampos();
 
 
-
-                JOptionPane.showMessageDialog(this, "Paciente eliminado correctamente");
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Paciente eliminado correctamente"
+                );
 
             }
 
 
 
-        } catch (Exception ex) {
+        } catch(Exception ex){
 
 
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(
+                    this,
+                    ex.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE
+            );
 
         }
 
@@ -374,32 +455,37 @@ public class VentanaPaciente extends JFrame {
 
 
 
-    // Método que carga los pacientes en la tabla
+
+
+
+    // Carga los pacientes en la tabla
     private void cargarTabla() {
 
 
-        // Borra filas anteriores
+        // Borra las filas anteriores
         modeloTabla.setRowCount(0);
 
 
 
-        // Recorre pacientes y agrega cada uno a la tabla
-        sPaciente.listarTodos().forEach(p -> {
+        // Recorre la lista de pacientes
+        sPaciente.listarTodos()
+
+                .forEach(p -> {
+                    // forEach recorre cada paciente de la lista
 
 
-            modeloTabla.addRow(new Object[]{
+
+                    // Agrega una fila con los datos
+                    modeloTabla.addRow(new Object[]{
+
+                            p.getNombre(),
+                            p.getApellido(),
+                            p.getCuil()
+
+                    });
 
 
-                    p.getNombre(),
-
-                    p.getApellido(),
-
-                    p.getCuil()
-
-            });
-
-
-        });
+                });
 
     }
 
@@ -407,7 +493,9 @@ public class VentanaPaciente extends JFrame {
 
 
 
-    // Limpia los campos del formulario
+
+
+    // Limpia los campos de texto
     private void limpiarCampos() {
 
 
@@ -423,24 +511,27 @@ public class VentanaPaciente extends JFrame {
 
 
 
-    // Valida que los datos estén completos
+
+
+    // Verifica que los datos estén completos
     private void validarCampos() throws Exception {
 
 
-        // Revisa si algún campo está vacío
-        if (txtNombre.getText().trim().isEmpty()
+        // trim() elimina espacios al principio y al final
+        if(txtNombre.getText().trim().isEmpty()
+
                 || txtApellido.getText().trim().isEmpty()
-                || txtCuil.getText().trim().isEmpty()) {
+
+                || txtCuil.getText().trim().isEmpty()){
 
 
-            // Lanza un error si falta información
             throw new Exception("Complete todos los campos");
 
         }
 
 
 
-        // Verifica que el CUIL sea un número
+        // Convierte texto a número para validar que sea correcto
         Long.parseLong(txtCuil.getText().trim());
 
     }

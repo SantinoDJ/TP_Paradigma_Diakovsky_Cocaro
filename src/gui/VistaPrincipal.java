@@ -1,41 +1,42 @@
 package gui;
 
 
-// Importa los servicios que manejan la lógica del sistema
 import servicio.ServicioPaciente;
 import servicio.ServicioOdontologo;
 import servicio.ServicioTurno;
 
 
-// Librerías para crear interfaz gráfica
 import javax.swing.*;
 
 import java.awt.*;
 
-
-// Permite manejar eventos de cierre de ventana
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 
 
-// JFrame permite crear la ventana principal
 public class VistaPrincipal extends JFrame {
+    // JFrame: permite crear una ventana gráfica
 
 
 
-    // Servicios que se envían a las demás ventanas
+    // Servicios que usa la interfaz
     private ServicioPaciente sPaciente;
+
     private ServicioOdontologo sOdonto;
+
     private ServicioTurno sTurno;
 
 
 
 
+
+
     // Constructor de la ventana principal
-    public VistaPrincipal(ServicioPaciente sPaciente,
-                          ServicioOdontologo sOdonto,
-                          ServicioTurno sTurno) {
+    public VistaPrincipal(
+            ServicioPaciente sPaciente,
+            ServicioOdontologo sOdonto,
+            ServicioTurno sTurno) {
 
 
 
@@ -49,58 +50,70 @@ public class VistaPrincipal extends JFrame {
 
 
 
-        // Configuración de la ventana
-        setTitle("Sistema Odontológico"); // Título
 
-        setSize(900,600); // Tamaño
-
-        setLocationRelativeTo(null); // Centra la ventana
+        // Título de la ventana
+        setTitle("Sistema Odontológico");
 
 
 
+        // Tamaño de la ventana
+        setSize(900,600);
 
-        // IMPORTANTE:
-        // Evita cerrar la ventana automáticamente
-        // Permite ejecutar código antes de salir
-        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+
+
+        // Centra la ventana en pantalla
+        setLocationRelativeTo(null);
+
+
+
+
+
+        // Evita que la ventana se cierre automáticamente
+        // Nosotros controlamos qué pasa al cerrar
+        setDefaultCloseOperation(
+                JFrame.DO_NOTHING_ON_CLOSE
+        );
+
 
 
 
 
 
         // Detecta cuando el usuario intenta cerrar la ventana
-        addWindowListener(new WindowAdapter() {
+        addWindowListener(
+                new WindowAdapter() {
 
 
 
-            @Override
-
-            public void windowClosing(WindowEvent e) {
-
-
-
-                // Muestra mensaje antes de cerrar
-                JOptionPane.showMessageDialog(
-                        null,
-                        "Cerrando sistema. Datos guardados."
-                );
+                    @Override
+                    public void windowClosing(WindowEvent e) {
 
 
 
-                // Cierra la ventana actual
-                dispose();
+                        // Muestra mensaje antes de cerrar
+                        JOptionPane.showMessageDialog(
+                                null,
+                                "Cerrando sistema. Datos guardados."
+                        );
 
 
 
-                // Finaliza el programa
-                System.exit(0);
+                        // Cierra la ventana correctamente
+                        dispose();
 
 
 
-            }
+                        // Termina completamente el programa
+                        System.exit(0);
 
 
-        });
+
+                    }
+
+
+                });
+
+
 
 
 
@@ -113,30 +126,35 @@ public class VistaPrincipal extends JFrame {
 
 
 
-        // Título que aparece arriba de la ventana
+
+
+        // Título que aparece arriba
         JLabel titulo = new JLabel(
                 "Sistema de Gestión Odontológica",
                 SwingConstants.CENTER
         );
 
 
-
-        // Agrega el título arriba
+        // Lo coloca arriba de la ventana
         add(titulo, BorderLayout.NORTH);
 
 
 
 
 
-        // Panel donde van los botones
+
+
+        // Panel donde estarán los botones
         JPanel panelBotones = new JPanel();
 
 
 
-        // Organiza los botones en una grilla
+        // Organiza botones en filas y columnas
         panelBotones.setLayout(
                 new GridLayout(3,1,10,10)
         );
+
+
 
 
 
@@ -167,7 +185,8 @@ public class VistaPrincipal extends JFrame {
 
 
 
-        // Cuando se toca abre la ventana de pacientes
+
+        // Cuando toca pacientes abre VentanaPaciente
         btnPacientes.addActionListener(e ->
 
                 new VentanaPaciente(sPaciente)
@@ -178,7 +197,7 @@ public class VistaPrincipal extends JFrame {
 
 
 
-        // Cuando se toca abre la ventana de odontólogos
+        // Cuando toca odontólogos abre VentanaOdontologo
         btnOdontologos.addActionListener(e ->
 
                 new VentanaOdontologo(sOdonto)
@@ -189,7 +208,9 @@ public class VistaPrincipal extends JFrame {
 
 
 
-        // Cuando se toca abre la ventana de turnos
+
+
+        // Cuando toca turnos abre VentanaTurno
         // Le pasa los servicios necesarios
         btnTurnos.addActionListener(e ->
 
@@ -205,7 +226,10 @@ public class VistaPrincipal extends JFrame {
 
 
 
-        // Cuando se toca abre la ventana de búsqueda
+
+
+
+        // Cuando toca buscar abre VentanaBuscar
         btnBuscar.addActionListener(e ->
 
                 new VentanaBuscar(
@@ -235,8 +259,12 @@ public class VistaPrincipal extends JFrame {
 
 
 
-        // Coloca el panel en el centro de la ventana
+
+
+        // Coloca el panel en el centro
         add(panelBotones, BorderLayout.CENTER);
+
+
 
 
 
@@ -244,8 +272,6 @@ public class VistaPrincipal extends JFrame {
 
         // Hace visible la ventana
         setVisible(true);
-
-
 
     }
 

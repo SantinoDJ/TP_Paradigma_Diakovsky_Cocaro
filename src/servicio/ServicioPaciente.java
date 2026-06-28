@@ -1,87 +1,84 @@
-package servicio; // Paquete de la capa de servicio.
+package servicio;
 
-import excepciones.DatoInvalidoException; // Excepción por datos inválidos.
-import excepciones.PacienteNoEncontradoException; // Excepción si no existe el paciente.
-import modelo.Paciente; // Importa la clase Paciente.
-import repositorio.IRepositorio; // Importa la interfaz del repositorio.
+import excepciones.DatoInvalidoException;
+import excepciones.PacienteNoEncontradoException;
+import modelo.Paciente;
+import repositorio.IRepositorio;
 
-import java.util.Comparator; // Permite ordenar.
-import java.util.List; // Permite usar listas.
-import java.util.stream.Collectors; // Convierte el Stream en una lista.
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
+
+// Clase que contiene la lógica de los pacientes
 public class ServicioPaciente {
 
-    private IRepositorio<Paciente> repositorio;
-    // Repositorio de pacientes.
+    private IRepositorio<Paciente> repositorio; // Repositorio donde se guardan los pacientes
 
+
+    // Constructor que recibe el repositorio
     public ServicioPaciente(IRepositorio<Paciente> repositorio) {
-        // Constructor.
-        this.repositorio = repositorio;
-        // Inicializa el repositorio.
+        this.repositorio = repositorio; // Guarda el repositorio recibido
     }
 
-    public void registrarPaciente(Paciente p) throws DatoInvalidoException {
-        // Registra un paciente.
 
-        if (p == null) {
-            // Verifica que no sea nulo.
+    // Registra un paciente nuevo
+    public void registrarPaciente(Paciente p) throws DatoInvalidoException {
+
+        if (p == null) { // Verifica que el paciente no sea vacío
             throw new DatoInvalidoException("El paciente no puede ser nulo.");
         }
 
-        if (p.getNombre() == null || p.getNombre().isBlank()) {
-            // Verifica que tenga nombre.
+        if (p.getNombre() == null || p.getNombre().isBlank()) { // Controla que tenga nombre
             throw new DatoInvalidoException("El nombre del paciente es obligatorio.");
         }
 
-        if (p.getCuil() == 0){
-            // Verifica que tenga CUIL.
+        if (p.getCuil() == 0){ // Controla que tenga CUIL
             throw new DatoInvalidoException("El CUIL del paciente es obligatorio.");
         }
 
-        repositorio.guardar(p);
-        // Guarda el paciente.
+        repositorio.guardar(p); // Guarda el paciente en el repositorio
 
         System.out.println("✅ Paciente registrado con éxito: " + p.getNombre());
-        // Muestra un mensaje.
     }
 
+
+    // Devuelve todos los pacientes registrados
     public List<Paciente> listarTodos() {
-        // Devuelve todos los pacientes.
         return repositorio.listarTodos();
     }
 
-    public List<Paciente> listarOrdenadosPorNombre() {
-        // Devuelve los pacientes ordenados por nombre.
-        return repositorio.listarTodos()
-                .stream() // Recorre la lista para trabajar con la lista
-                .sorted(Comparator.comparing(Paciente::getNombre))
-                // Ordena a los odontologos por el atributo nombre
-                .collect(Collectors.toList()); // Guarda el resultado ordenado en una nueva lista
 
+    // Devuelve los pacientes ordenados por nombre
+    public List<Paciente> listarOrdenadosPorNombre() {
+
+        return repositorio.listarTodos()
+                .stream() // Convierte la lista en un flujo para procesarla
+                .sorted(Comparator.comparing(Paciente::getNombre)) // Ordena usando el nombre del paciente
+                .collect(Collectors.toList()); // Convierte nuevamente a lista
     }
 
+
+    // Busca un paciente usando su CUIL
     public Paciente buscarPorCuil(Long cuil) throws PacienteNoEncontradoException {
-        // Busca un paciente por CUIL.
 
-        Paciente paciente = repositorio.buscarPorId(cuil);
-        // Busca en el repositorio.
+        Paciente paciente = repositorio.buscarPorId(cuil); // Busca el paciente en el repositorio
 
-        if (paciente == null) {
-            // Verifica si existe.
+
+        if (paciente == null) { // Si no existe lanza excepción
             throw new PacienteNoEncontradoException("No existe un paciente con CUIL: " + cuil);
         }
 
-        return paciente;
-        // Devuelve el paciente.
+
+        return paciente; // Devuelve el paciente encontrado
     }
 
+
+    // Elimina un paciente por CUIL
     public void eliminarPaciente(Long cuil) throws PacienteNoEncontradoException {
-        // Elimina un paciente.
 
-        Paciente paciente = buscarPorCuil(cuil);
-        // Verifica que exista.
+        Paciente paciente = buscarPorCuil(cuil); // Busca primero si existe
 
-        repositorio.eliminar(paciente.getCuil());
-        // Lo elimina.
+        repositorio.eliminar(paciente.getCuil()); // Elimina el paciente del repositorio
     }
 }

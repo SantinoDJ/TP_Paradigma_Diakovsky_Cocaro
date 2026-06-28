@@ -5,101 +5,146 @@ import util.Persistencia;
 
 import java.util.*;
 
-public class TurnoRepositorio implements IRepositorio<Turno> {
-    // Repositorio para turnos.
 
-    private List<Turno> turnos;
-    // Lista donde se guardan los turnos.
+// Clase encargada de manejar los turnos y guardarlos en un archivo
+public class TurnoRepositorio implements IRepositorio<Turno> {
+
+
+    private List<Turno> turnos; // Lista donde se almacenan todos los turnos
+
+
 
     public TurnoRepositorio(){
-        // Constructor.
 
+
+        // Carga los turnos guardados anteriormente desde el archivo
         Object datos = Persistencia.cargar("turnos.dat");
-        // Carga los turnos del archivo.
 
-        if(datos != null){
-            turnos = (List<Turno>) datos;
-            // Recupera los datos guardados.
+
+
+        if(datos != null){ // Si encontró datos guardados
+
+            turnos = (List<Turno>) datos; // Convierte el Object cargado a una lista de Turnos
+
+
         } else {
-            turnos = new ArrayList<>();
-            // Crea una lista vacía.
+
+            turnos = new ArrayList<>(); // Si no hay datos crea una lista vacía
+
         }
+
     }
+
+
+
+
+
+
 
     @Override
     public void guardar(Turno t) {
-        // Guarda un turno.
 
-        turnos.add(t);
-        // Agrega el turno a la lista.
 
-        Persistencia.guardar(
-                turnos,
-                "turnos.dat"
-        );
-        // Guarda los cambios.
+        turnos.add(t); // Agrega un nuevo turno a la lista
+
+
+        Persistencia.guardar(turnos, "turnos.dat"); // Guarda la lista actualizada en el archivo
+
     }
+
+
+
+
+
+
 
     @Override
     public Turno buscarPorId(Long id) {
-        // Busca un turno por ID.
 
-        return turnos.stream()
-                // Recorre la lista.
+
+        return turnos.stream() // Convierte la lista de turnos en un Stream para procesarla
+
                 .filter(t -> Long.valueOf(t.getId()).equals(id))
-                // Filtra el turno con ese ID.
+                // filter busca solamente el turno que tenga ese ID
+
+
                 .findFirst()
-                // Toma el primero que encuentra.
-                .orElse(null);
-        // Si no existe, devuelve null.
+                // Devuelve el primer turno encontrado
+
+
+                .orElse(null); // Si no encuentra ninguno devuelve null
+
+
+
     }
+
+
+
+
+
+
 
     @Override
     public List<Turno> listarTodos() {
-        // Devuelve todos los turnos.
 
-        return turnos;
+
+        return turnos; // Devuelve la lista completa de turnos
+
     }
+
+
+
+
+
+
 
     @Override
     public void eliminar(Long id) {
-        // Elimina un turno.
 
-        turnos.removeIf(
-                t -> Long.valueOf(t.getId()).equals(id)
-        );
-        // Elimina el turno con ese ID.
 
-        Persistencia.guardar(
-                turnos,
-                "turnos.dat"
-        );
-        // Guarda los cambios.
+        turnos.removeIf(t -> Long.valueOf(t.getId()).equals(id));
+        // removeIf elimina los turnos que cumplen la condición del ID
+
+
+        Persistencia.guardar(turnos, "turnos.dat");
+        // Guarda los cambios en el archivo
+
     }
+
+
+
+
+
+
+
 
     @Override
     public void actualizar(Turno t) {
-        // Actualiza un turno.
+
 
         for(int i = 0; i < turnos.size(); i++){
-            // Recorre la lista.
+            // Recorre la lista buscando el turno a modificar
 
-            if(turnos.get(i).getId()
-                    .equals(t.getId())){
-                // Busca el turno con el mismo ID.
+
+            if(turnos.get(i).getId().equals(t.getId())){
+                // Compara el ID del turno guardado con el nuevo turno
+
 
                 turnos.set(i,t);
-                // Lo reemplaza.
+                // Reemplaza el turno viejo por el nuevo
+
 
                 break;
-                // Termina el recorrido.
+                // Termina el recorrido porque ya encontró el turno
+
             }
+
         }
 
-        Persistencia.guardar(
-                turnos,
-                "turnos.dat"
-        );
-        // Guarda los cambios.
+
+        Persistencia.guardar(turnos, "turnos.dat");
+        // Guarda la lista actualizada
+
     }
+
 }
