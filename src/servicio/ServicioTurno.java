@@ -71,8 +71,7 @@ public class ServicioTurno {
                                 && turno.getOdontologo().getId() == t.getOdontologo().getId()  // Compara si el odontólogo es el mismo usando su ID
 
 
-                ); // Busca si existe un turno con la misma fecha, hora y odontólogo. Si encuentra uno devuelve true
-
+                );
 
 
         if (ocupado) { // Si el horario ya está ocupado lanza error
@@ -111,11 +110,11 @@ public class ServicioTurno {
 
         return turnoRepo.listarTodos()
 
-                .stream() // Convierte lista en stream
+                .stream() // Convierte la lista en stream
 
                 .filter(t -> t.getFecha().equals(fecha)) // Filtra por fecha
 
-                .collect(Collectors.toList()); // Convierte nuevamente a lista
+                .collect(Collectors.toList()); // Convierte nuevamente el stream a lista
 
     }
 
@@ -145,7 +144,7 @@ public class ServicioTurno {
 
         return turnoRepo.listarTodos()
 
-                .stream() // Convierte la lista para procesarla
+                .stream() // Convierte la lista en stream para procesarla
 
                 .filter(t -> t.getOdontologo().getId() == idOdontologo) // Filtra por ID
 

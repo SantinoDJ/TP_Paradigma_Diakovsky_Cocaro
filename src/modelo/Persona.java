@@ -12,7 +12,8 @@ public abstract class Persona implements Serializable {
 
 
 
-    // Identificador para controlar la versión de la clase al serializar
+    // Sirve para identificar la versión de una clase serializable.
+
     private static final long serialVersionUID = 1L;
 
 

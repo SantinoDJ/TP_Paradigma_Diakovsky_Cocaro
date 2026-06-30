@@ -9,6 +9,7 @@ public class OdontologoRepositorio implements IRepositorio<Odontologo> {
     // Implementa los métodos del repositorio para Odontologo.
 
     private Map<Long, Odontologo> odontologos; // Almacena los odontólogos usando el ID como clave.
+                                                //map<long: guarda datos en pares: una clave y un valor
 
 
     public OdontologoRepositorio() { // Constructor
@@ -20,8 +21,10 @@ public class OdontologoRepositorio implements IRepositorio<Odontologo> {
         if(datos != null){
             odontologos = (Map<Long, Odontologo>) datos; // Si hay datos, los recupera.
 
+
         } else {
             odontologos = new HashMap<>(); // Si no hay datos, crea un mapa vacío.
+                                            //hashmap: guarda datos por ID (clave) para encontrarlos rápido
 
         }
     }

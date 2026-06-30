@@ -55,7 +55,7 @@ public class ServicioPaciente {
         return repositorio.listarTodos()
                 .stream() // Convierte la lista en un flujo para procesarla
                 .sorted(Comparator.comparing(Paciente::getNombre)) // Ordena usando el nombre del paciente
-                .collect(Collectors.toList()); // Convierte nuevamente a lista
+                .collect(Collectors.toList()); // Convierte nuevamente el stream a lista
     }
 
 
