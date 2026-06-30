@@ -127,7 +127,7 @@ public class ServicioTurno {
 
         return turnoRepo.listarTodos()
 
-                .stream() // Permite recorrer y filtrar la lista
+                .stream() // Convierte la lista en stream
 
                 .filter(t -> t.getPaciente().getCuil() == cuilPaciente) // Filtra por CUIL
 
